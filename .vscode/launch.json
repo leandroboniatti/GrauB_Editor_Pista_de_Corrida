@@ -1,0 +1,47 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            // Configuração para debug do Editor de Pista
+            "name": "Debug Editor de Pista",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/track_editor.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "c:\\msys64\\ucrt64\\bin\\gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "Habilitar formatação bonita para gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Definir modo de desmontagem como Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "Build Editor de Pista"
+        },
+        {
+            // Configuração para executar o Editor de Pista
+            "name": "Run Editor de Pista",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/track_editor.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "miDebuggerPath": "c:\\msys64\\ucrt64\\bin\\gdb.exe",
+            "preLaunchTask": "Build Editor de Pista"
+        }
+    ]
+}

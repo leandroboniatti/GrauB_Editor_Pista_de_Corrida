@@ -1,0 +1,25 @@
+# ATENÇÃO: Textura de Asfalto
+
+O editor exporta a pista com referência à textura:
+`textures/asfalto.jpg`
+
+## Você precisa:
+1. Baixar ou criar uma imagem de asfalto
+2. Salvar como: `textures/asfalto.jpg`
+
+## Alternativas:
+- Usar uma das texturas existentes (ex: woodTexture.jpg)
+- Modificar o arquivo `models/track.mtl` para apontar para outra textura
+- Procurar texturas gratuitas em:
+  - https://www.textures.com/
+  - https://polyhaven.com/textures
+  - https://www.poliigon.com/
+
+## Modificar a textura no código:
+Se quiser usar outra textura, edite o arquivo `src/TrackEditor.cpp` na função `exportToOBJ()`:
+```cpp
+mtlFile << "map_Kd textures/SUA_TEXTURA.jpg" << endl;
+```
+
+Por enquanto, o editor funciona perfeitamente sem a textura. 
+A textura só é necessária ao visualizar a pista em um visualizador 3D.

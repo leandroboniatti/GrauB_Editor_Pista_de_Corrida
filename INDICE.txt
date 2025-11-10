@@ -1,0 +1,179 @@
+═══════════════════════════════════════════════════════════════════════
+         📚 ÍNDICE DE DOCUMENTAÇÃO - EDITOR DE PISTA
+═══════════════════════════════════════════════════════════════════════
+
+🚀 INÍCIO RÁPIDO:
+   └─→ Leia: GUIA_RAPIDO.txt
+       ├─ Como compilar
+       ├─ Como executar
+       ├─ Passo a passo para criar pista
+       └─ Atalhos de teclado
+
+📖 DOCUMENTAÇÃO COMPLETA:
+   └─→ Leia: README_EDITOR.md
+       ├─ Descrição detalhada
+       ├─ Estrutura do projeto
+       ├─ Algoritmo B-Spline explicado
+       ├─ Processo de geração da pista
+       └─ Exportação de arquivos
+
+📋 VISÃO GERAL DO PROJETO:
+   └─→ Leia: PROJETO_COMPLETO.md
+       ├─ Resumo executivo
+       ├─ Funcionalidades implementadas ✅
+       ├─ Requisitos atendidos
+       └─ Status do projeto
+
+📂 ESTRUTURA DE ARQUIVOS:
+   └─→ Leia: ESTRUTURA_VISUAL.txt
+       ├─ Árvore visual do projeto
+       ├─ Legenda de arquivos
+       ├─ Fluxo de trabalho
+       └─ Próximos passos
+
+🗑️  LIMPEZA E ORGANIZAÇÃO:
+   └─→ Leia: ARQUIVOS_INFO.md
+       ├─ Arquivos essenciais (não deletar)
+       ├─ Arquivos não utilizados (pode deletar)
+       ├─ Estrutura mínima
+       └─ Comandos para limpeza
+
+🧪 TESTES E VALIDAÇÃO:
+   └─→ Leia: TESTES.md
+       ├─ 8 testes recomendados
+       ├─ Checklist de validação
+       ├─ Problemas comuns e soluções
+       └─ Resultados esperados
+
+🖼️  INFORMAÇÕES SOBRE TEXTURA:
+   └─→ Leia: TEXTURA_INFO.txt
+       ├─ Como adicionar textura de asfalto
+       ├─ Alternativas
+       └─ Como modificar no código
+
+═══════════════════════════════════════════════════════════════════════
+                        ARQUIVOS DE CÓDIGO
+═══════════════════════════════════════════════════════════════════════
+
+💻 PRINCIPAIS:
+   ├─→ main.cpp              - Loop principal e renderização
+   ├─→ include/TrackEditor.h - Interface da classe
+   └─→ src/TrackEditor.cpp   - Implementação (B-Spline, exportação)
+
+🎨 SHADERS:
+   ├─→ shaders/editor.vs     - Vertex shader 2D
+   └─→ shaders/editor.fs     - Fragment shader 2D
+
+⚙️  CONFIGURAÇÕES:
+   ├─→ .vscode/tasks.json    - Tasks de compilação
+   ├─→ .vscode/launch.json   - Configurações de debug
+   └─→ .vscode/c_cpp_properties.json - IntelliSense
+
+═══════════════════════════════════════════════════════════════════════
+                     DEPENDÊNCIAS DO PROJETO
+═══════════════════════════════════════════════════════════════════════
+
+📦 Bibliotecas Utilizadas:
+   ├─→ GLAD      - OpenGL function loader
+   ├─→ GLFW      - Window and input management
+   ├─→ GLM       - Mathematics library
+   └─→ Shader.h  - Helper class (reutilizada)
+
+═══════════════════════════════════════════════════════════════════════
+                      ORDEM DE LEITURA SUGERIDA
+═══════════════════════════════════════════════════════════════════════
+
+Para USUÁRIOS (usar o editor):
+   1. GUIA_RAPIDO.txt          ← Comece aqui!
+   2. README_EDITOR.md         ← Para entender melhor
+   3. TESTES.md                ← Validar funcionamento
+
+Para DESENVOLVEDORES (entender o código):
+   1. PROJETO_COMPLETO.md      ← Visão geral
+   2. ESTRUTURA_VISUAL.txt     ← Estrutura de arquivos
+   3. README_EDITOR.md         ← Detalhes técnicos
+   4. include/TrackEditor.h    ← Interface
+   5. src/TrackEditor.cpp      ← Implementação
+   6. main.cpp                 ← Loop principal
+
+Para MANUTENÇÃO (limpar/organizar):
+   1. ARQUIVOS_INFO.md         ← O que manter/deletar
+   2. ESTRUTURA_VISUAL.txt     ← Estrutura atual
+
+═══════════════════════════════════════════════════════════════════════
+                         COMANDOS RÁPIDOS
+═══════════════════════════════════════════════════════════════════════
+
+🔨 COMPILAR:
+   VS Code: Ctrl+Shift+B → "Build Editor de Pista"
+   
+   Terminal:
+   g++ -std=c++17 -g -Iinclude -IDependencies/GLAD/include 
+   -IDependencies/GLFW/include -IDependencies/glm main.cpp 
+   src/Shader.cpp src/TrackEditor.cpp Dependencies/GLAD/src/glad.c 
+   -LDependencies/GLFW/lib-mingw-w64 -lglfw3 -lopengl32 -lgdi32 
+   -luser32 -lkernel32 -o track_editor.exe
+
+▶️ EXECUTAR:
+   VS Code: F5 (com debug) ou Ctrl+F5 (sem debug)
+   Terminal: ./track_editor.exe
+
+🧪 TESTAR:
+   Siga os testes em TESTES.md
+
+═══════════════════════════════════════════════════════════════════════
+                      FLUXO DE USO DO EDITOR
+═══════════════════════════════════════════════════════════════════════
+
+1. 🖱️  Clique esquerdo em 4+ pontos (pontos de controle vermelhos)
+2. 🔤 Pressione G (gera curva verde - B-Spline)
+3. 🔤 Pressione T (gera bordas azul e amarela)
+4. 🔤 Pressione M (triangulariza malha - invisível)
+5. 🔤 Pressione E (exporta para models/track.obj)
+
+   💡 Clique direito remove o último ponto adicionado
+
+═══════════════════════════════════════════════════════════════════════
+                       ARQUIVOS GERADOS
+═══════════════════════════════════════════════════════════════════════
+
+Após pressionar E, são criados:
+   ✨ models/track.obj        - Malha 3D da pista
+   ✨ models/track.mtl        - Material da pista
+   ✨ models/track_curve.txt  - Pontos para animação
+
+═══════════════════════════════════════════════════════════════════════
+                      SUPORTE E TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════════════
+
+❓ Dúvidas sobre uso:
+   → Consulte GUIA_RAPIDO.txt
+
+❓ Problemas de compilação:
+   → Verifique .vscode/tasks.json
+   → Confirme que g++ está instalado
+   → Verifique caminhos das dependências
+
+❓ Problemas de execução:
+   → Consulte seção "Problemas Comuns" em TESTES.md
+   → Verifique mensagens no console
+
+❓ Arquivos não são gerados:
+   → Complete sequência: G → T → M → E
+   → Verifique que pasta models/ existe
+   → Consulte mensagens no console
+
+═══════════════════════════════════════════════════════════════════════
+                         INFORMAÇÕES DO PROJETO
+═══════════════════════════════════════════════════════════════════════
+
+📌 Projeto: Grau B - Editor de Pista de Corrida
+📌 Disciplina: Computação Gráfica em Tempo Real
+📌 Curso: Jogos Digitais - Unisinos
+📌 Alunos: Ian Rossetti Boniatti e Eduardo Tropea
+📌 Data: Novembro 2025
+📌 Status: ✅ COMPLETO E FUNCIONAL
+
+═══════════════════════════════════════════════════════════════════════
+             🎉 Projeto implementado com sucesso! 🎉
+═══════════════════════════════════════════════════════════════════════

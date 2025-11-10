@@ -1,0 +1,57 @@
+═══════════════════════════════════════════════════════════════
+    EDITOR DE PISTA DE CORRIDA - GUIA DE USO
+═══════════════════════════════════════════════════════════════
+
+1. Compilar e Executar: F5
+2. Execute: digitar ./track_editor.exe no Terminal
+3. Crie a pista seguindo os passos abaixo:
+
+1️⃣  Clique em pelo menos 4 pontos na tela
+    → Pontos VERMELHOS aparecem
+
+2️⃣  Pressione G (Gerar curva B-Spline)
+    → Curva VERDE (B-Spline) é gerada
+
+3️⃣  Pressione T (Traçar curvas interna e externa)
+    → Curvas AZUL (interna) e AMARELA (externa) aparecem
+
+4️⃣  Pressione E (Exporta a malha após a triangularização)
+    → Malha é triangularizada
+    → Arquivos OBJ são criados em /models/
+
+🎯 ATALHOS DE TECLADO:
+----------------------
+Clique Esquerdo  →  Adicionar ponto de controle
+Clique Direito   →  Remover último ponto
+C                →  Limpar todos (Clear)
+G                →  Gerar B-Spline (Generate)
+T                →  Gerar pista (Track)
+E                →  Exportar OBJ (Export)
+ESC              →  Sair
+
+📊 CORES NO EDITOR:
+-------------------
+🔴 VERMELHO  = Pontos de controle (você define)
+🟢 VERDE     = Curva B-Spline (calculada)
+🔵 AZUL      = Borda interna da pista
+🟡 AMARELO   = Borda externa da pista
+
+📁 ARQUIVOS GERADOS:
+--------------------
+Após pressionar E, os arquivos são criados:
+  • models/track.obj        → Malha 3D da pista
+  • models/track.mtl        → Material
+  • models/track_curve.txt  → Pontos para animação
+
+💡 DICAS:
+---------
+✓ Mínimo: 4 pontos de controle
+✓ Mais pontos = curva mais complexa
+✓ Distribua os pontos uniformemente para melhor resultado
+✓ O circuito é sempre fechado (último ponto conecta ao primeiro)
+✓ Experimente diferentes configurações!
+
+⚠️  IMPORTANTE:
+--------------
+• Siga a ordem: G → T → E
+• Console mostra mensagens de progresso
