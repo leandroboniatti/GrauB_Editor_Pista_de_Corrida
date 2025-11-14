@@ -19,7 +19,6 @@
                 "-IDependencies/glm",
                 // Aqui você inclui o caminho para os arquivos fonte (.c ou .cpp) (sources)
                 "main.cpp",
-                "src/Shader.cpp",
                 "src/TrackEditor.cpp",
                 "Dependencies/GLAD/src/glad.c",
                 // Aqui você inclui o diretório que possui as bibliotecas estáticas

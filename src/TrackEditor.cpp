@@ -3,30 +3,31 @@
 #include <cmath>
 #include <iostream>
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
+//#ifndef M_PI
+//#define M_PI 3.14159265358979323846
+//#endif
 
-TrackEditor::TrackEditor() {
-}
+// construtor
+TrackEditor::TrackEditor() { }
 
-TrackEditor::~TrackEditor() {
-}
+// destrutor
+TrackEditor::~TrackEditor() { }
 
-void TrackEditor::addControlPoint(vec2 point) {
-    controlPoints.push_back(point);
+
+void TrackEditor::adicionarPontoDeControle(vec2 point) {
+    pontosDeControle.push_back(point);
     cout << "Ponto de controle adicionado: (" << point.x << ", " << point.y << ")" << endl;
 }
 
-void TrackEditor::removeLastControlPoint() {
-    if (!controlPoints.empty()) {
-        controlPoints.pop_back();
+void TrackEditor::removerUltimoPontoDeControle() {
+    if (!pontosDeControle.empty()) {
+        pontosDeControle.pop_back();
         cout << "Ultimo ponto de controle removido" << endl;
     }
 }
 
-void TrackEditor::clearControlPoints() {
-    controlPoints.clear();
+void TrackEditor::limparPontosDeControle() {
+    pontosDeControle.clear();
     bSplinePoints.clear();
     innerCurve.clear();
     outerCurve.clear();
@@ -36,7 +37,7 @@ void TrackEditor::clearControlPoints() {
 }
 
 // Função de base B-Spline (base de Cox-de Boor)
-float TrackEditor::bSplineBasis(int i, int k, float t) {
+float TrackEditor::baseBSpline(int i, int k, float t) {
     // Para B-Spline uniforme de grau 3 (cúbica)
     // Implementação simplificada para curva fechada
     
@@ -56,12 +57,12 @@ float TrackEditor::bSplineBasis(int i, int k, float t) {
         c2 = (i + k + 1 - t) / denom2;
     }
     
-    return c1 * bSplineBasis(i, k - 1, t) + c2 * bSplineBasis(i + 1, k - 1, t);
+    return c1 * baseBSpline(i, k - 1, t) + c2 * baseBSpline(i + 1, k - 1, t);
 }
 
 // Avalia a curva B-Spline no parâmetro t
-vec2 TrackEditor::evaluateBSpline(float t, int i) {
-    int n = controlPoints.size();
+vec2 TrackEditor::avaliarBSpline(float t, int i) {
+    int n = pontosDeControle.size();
     if (n < 4) return vec2(0, 0);  // Precisa de pelo menos 4 pontos
     
     // B-Spline cúbica uniforme
@@ -79,18 +80,18 @@ vec2 TrackEditor::evaluateBSpline(float t, int i) {
     int i2 = (i + 2) % n;
     int i3 = (i + 3) % n;
     
-    vec2 point = b0 * controlPoints[i0] +
-                 b1 * controlPoints[i1] +
-                 b2 * controlPoints[i2] +
-                 b3 * controlPoints[i3];
+    vec2 point = b0 * pontosDeControle[i0] +
+                 b1 * pontosDeControle[i1] +
+                 b2 * pontosDeControle[i2] +
+                 b3 * pontosDeControle[i3];
     
     return point;
 }
 
-void TrackEditor::generateBSpline(int resolution) {
+void TrackEditor::gerarBSpline(int resolution) {
     bSplinePoints.clear();
     
-    int n = controlPoints.size();
+    int n = pontosDeControle.size();
     if (n < 4) {
         cout << "Necessario pelo menos 4 pontos de controle para gerar B-Spline" << endl;
         return;
@@ -100,7 +101,7 @@ void TrackEditor::generateBSpline(int resolution) {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < resolution; j++) {
             float t = float(j) / float(resolution);
-            vec2 point = evaluateBSpline(i + t, i);
+            vec2 point = avaliarBSpline(i + t, i);
             bSplinePoints.push_back(point);
         }
     }
@@ -109,7 +110,7 @@ void TrackEditor::generateBSpline(int resolution) {
 }
 
 // Calcula o vetor perpendicular normalizado
-vec2 TrackEditor::calculatePerpendicular(vec2 p1, vec2 p2) {
+vec2 TrackEditor::calcularPerpendicular(vec2 p1, vec2 p2) {
     vec2 tangent = p2 - p1;
     
     // Normaliza o vetor tangente
@@ -125,7 +126,7 @@ vec2 TrackEditor::calculatePerpendicular(vec2 p1, vec2 p2) {
 }
 
 // Calcula o ângulo entre dois vetores
-float TrackEditor::calculateAngle(vec2 v1, vec2 v2) {
+float TrackEditor::calcularAngulo(vec2 v1, vec2 v2) {
     // Normaliza os vetores
     float len1 = sqrt(v1.x * v1.x + v1.y * v1.y);
     float len2 = sqrt(v2.x * v2.x + v2.y * v2.y);
@@ -144,7 +145,8 @@ float TrackEditor::calculateAngle(vec2 v1, vec2 v2) {
     return acos(dot);
 }
 
-void TrackEditor::calculateInnerOuterCurves(float trackWidth) {
+// Calcula as curvas interna e externa da pista
+void TrackEditor::calcularCurvasInternaExterna(float trackWidth) {
     innerCurve.clear();
     outerCurve.clear();
     
@@ -160,7 +162,7 @@ void TrackEditor::calculateInnerOuterCurves(float trackWidth) {
         vec2 next = bSplinePoints[(i + 1) % numPoints];
         
         // Calcula vetor perpendicular
-        vec2 perpendicular = calculatePerpendicular(current, next);
+        vec2 perpendicular = calcularPerpendicular(current, next);
         
         // Calcula a largura da pista (metade para cada lado)
         float halfWidth = trackWidth / 2.0f;
@@ -176,7 +178,8 @@ void TrackEditor::calculateInnerOuterCurves(float trackWidth) {
     cout << "Curvas interna e externa calculadas com " << innerCurve.size() << " pontos cada" << endl;
 }
 
-void TrackEditor::triangulateMesh() {
+// Triangulariza a malha da pista
+void TrackEditor::triangularizarMalha() {
     vertices.clear();
     triangles.clear();
     
@@ -233,7 +236,8 @@ void TrackEditor::triangulateMesh() {
          << triangles.size() << " triangulos" << endl;
 }
 
-void TrackEditor::calculateNormals() {
+// Calcula as normais das faces
+void TrackEditor::calcularNormais() {
     if (vertices.empty() || triangles.empty()) {
         cout << "Necessario triangularizar antes de calcular normais" << endl;
         return;
@@ -276,24 +280,27 @@ void TrackEditor::calculateNormals() {
     cout << "Normais calculadas" << endl;
 }
 
-bool TrackEditor::exportToOBJ(const string& filename) {
+// Exporta a pista para arquivo OBJ
+bool TrackEditor::exportarOBJ(const string& outputPath) {
     if (vertices.empty() || triangles.empty()) {
         cout << "Nenhuma malha para exportar" << endl;
-        return false;
-    }
+        return false; }
+
+    string filenameObj = outputPath + "track.obj";
+    string filenameMtl = outputPath + "track.mtl";    
     
-    ofstream file(filename);
+    ofstream file(filenameObj); // stream para o arquivo OBJ
+
     if (!file.is_open()) {
-        cout << "Erro ao abrir arquivo: " << filename << endl;
-        return false;
-    }
+        cout << "Erro ao abrir arquivo: " << filenameObj << endl;
+        return false; }
     
-    file << "# Track Editor - Pista de Corrida" << endl;
-    file << "# Vertices: " << vertices.size() << endl;
-    file << "# Faces: " << triangles.size() << endl;
+    file << "# Editor de Pista de Corrida" << endl;
+    file << "# Quantidade de Vertices: " << vertices.size() << endl;
+    file << "# Quantidade de Faces/Triangulos: " << triangles.size() << endl;
     file << endl;
     
-    file << "mtllib track.mtl" << endl;
+    file << "mtllib " << filenameMtl << endl;
     file << "usemtl track_material" << endl;
     file << endl;
     
@@ -301,6 +308,7 @@ bool TrackEditor::exportToOBJ(const string& filename) {
     for (const auto& v : vertices) {
         file << "v " << v.position.x << " " << v.position.z << " " << v.position.y << endl;
     }
+
     file << endl;
     
     // Exporta coordenadas de textura
@@ -324,11 +332,10 @@ bool TrackEditor::exportToOBJ(const string& filename) {
     }
     
     file.close();
-    cout << "Pista exportada para: " << filename << endl;
+    cout << "Pista exportada para: " << filenameObj << endl;
     
     // Cria arquivo MTL
-    string mtlFilename = "models/track.mtl";
-    ofstream mtlFile(mtlFilename);
+    ofstream mtlFile(filenameMtl);
     if (mtlFile.is_open()) {
         mtlFile << "# Track Material" << endl;
         mtlFile << "newmtl track_material" << endl;
@@ -338,35 +345,37 @@ bool TrackEditor::exportToOBJ(const string& filename) {
         mtlFile << "Ns 32" << endl;
         mtlFile << "map_Kd textures/asfalto.jpg" << endl;
         mtlFile.close();
-        cout << "Material exportado para: " << mtlFilename << endl;
+        cout << "Material exportado para: " << filenameMtl << endl;
     }
     
     return true;
 }
 
-bool TrackEditor::exportAnimationCurve(const string& filename) {
+// Exporta a curva b-spline para arquivo de animação
+bool TrackEditor::exportarCurvaAnimacao(const string& outputPath) {
+
     if (bSplinePoints.empty()) {
         cout << "Nenhuma curva para exportar" << endl;
-        return false;
-    }
+        return false; }
     
-    ofstream file(filename);
+    string filenameTxt = outputPath + "track_curve.txt";    
+
+    ofstream file(filenameTxt); // stream para o arquivo de curva
+
     if (!file.is_open()) {
-        cout << "Erro ao abrir arquivo: " << filename << endl;
-        return false;
-    }
+        cout << "Erro ao abrir arquivo: " << filenameTxt << endl;
+        return false; }
     
-    file << "# Track Animation Curve" << endl;
-    file << "# Total points: " << bSplinePoints.size() << endl;
+    file << "# Curva de Animacao b-Spline" << endl;
+    file << "# Total de pontos: " << bSplinePoints.size() << endl;
     file << endl;
     
     // Exporta pontos da curva B-Spline (Y -> Z para o visualizador)
-    for (const auto& point : bSplinePoints) {
-        file << point.x << " " << 0.0f << " " << point.y << endl;
-    }
+    for (const auto& point : bSplinePoints) { file << point.x << " " << 0.0f << " " << point.y << endl; }
     
     file.close();
-    cout << "Curva de animacao exportada para: " << filename << endl;
+
+    cout << "Curva de animacao exportada para: " << filenameTxt << endl;
     
     return true;
 }
